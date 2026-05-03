@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Short Forge - Answer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --accent-color: #38bdf8;
+            --code-bg: #020617;
+            --font-sans: 'Inter', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            width: 1080px;
+            height: 1920px;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            font-family: var(--font-sans);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 80px;
+            overflow: hidden;
+        }
+
+        .answer-title {
+            font-size: 84px;
+            font-weight: 700;
+            margin-bottom: 80px;
+            color: var(--accent-color);
+            line-height: 1.2;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+        }
+
+        .answer-container {
+            background-color: var(--card-bg);
+            border-radius: 40px;
+            padding: 100px;
+            width: 100%;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .answer-text {
+            font-family: var(--font-mono);
+            font-size: 72px;
+            line-height: 1.4;
+            color: #ffffff;
+            word-break: break-word;
+        }
+
+        .footer-logo {
+            margin-top: 120px;
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--text-secondary);
+            opacity: 0.5;
+            letter-spacing: 2px;
+        }
+    </style>
+</head>
+<body>
+    <div class="answer-title">The Answer Is</div>
+    
+    <div class="answer-container">
+        <div class="answer-text">{{answer}}</div>
+    </div>
+
+    <div class="footer-logo">SHORT FORGE</div>
+</body>
+</html>

@@ -2,7 +2,13 @@
   "name": "@short-forge/source",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "start": "nx serve short-forge",
+    "start:dev": "nx serve short-forge",
+    "dev": "nx serve short-forge",
+    "build": "nx build short-forge",
+    "test": "nx test short-forge"
+  },
   "private": true,
   "dependencies": {
     "@nestjs/common": "^11.0.0",
@@ -15,6 +21,7 @@
   "devDependencies": {
     "@eslint/js": "^9.8.0",
     "@nestjs/schematics": "^11.0.0",
+    "@nestjs/swagger": "^11.4.2",
     "@nestjs/testing": "^11.0.0",
     "@nx/eslint": "22.7.1",
     "@nx/eslint-plugin": "22.7.1",
@@ -37,11 +44,14 @@
     "jest-util": "^30.0.2",
     "nx": "22.7.1",
     "prettier": "~3.6.2",
+    "puppeteer": "^24.42.0",
     "ts-jest": "^29.4.0",
     "ts-node": "10.9.1",
     "tslib": "^2.3.0",
     "typescript": "~5.9.2",
     "typescript-eslint": "^8.40.0",
-    "webpack-cli": "^5.1.4"
+    "uuid": "^14.0.0",
+    "webpack-cli": "^5.1.4",
+    "zod": "^4.4.2"
   }
 }

@@ -1,101 +1,129 @@
-# ShortForge
+# 🛠️ ShortForge
 
-<a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>
+[![NestJS](https://img.shields.io/badge/Framework-NestJS-red?logo=nestjs)](https://nestjs.com/)
+[![Nx](https://img.shields.io/badge/Monorepo-Nx-blue?logo=nx)](https://nx.dev/)
+[![TypeScript](https://img.shields.io/badge/Language-TypeScript-blue?logo=typescript)](https://www.typescriptlang.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-✨ Your new, shiny [Nx workspace](https://nx.dev) is ready ✨.
+**ShortForge** is a high-performance, production-ready SaaS backend designed to automate the generation of vertical coding puzzles. Using a combination of Local LLMs (Ollama), Headless Browsers (Puppeteer), and Media Processing (FFmpeg), it transforms logic puzzles into engaging 1080x1920 video content.
 
-[Learn more about this workspace setup and its capabilities](https://nx.dev/nx-api/nest?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects) or run `npx nx graph` to visually explore what was created. Now, let's get you up to speed!
+---
 
-## Run tasks
+## 🚀 Features
 
-To run the dev server for your app, use:
+- **🤖 AI-Powered Puzzle Generation**: Leverages local Ollama instances (Gemma/Qwen) to generate unique coding puzzles.
+- **🖼️ Timeline-Based Rendering**: Automated 12-frame generation including question, countdown timer, and dedicated answer screens.
+- **🎬 Professional Video Stitching**: High-fidelity MP4 generation with H.264 encoding optimized for social media (TikTok/Reels/Shorts).
+- **🎨 Dynamic Templating**: HTML5/CSS3 templates with glassmorphism aesthetics and responsive typography.
+- **🛡️ Production Grade Architecture**: Modular NestJS design with strict Zod validation and safe HTML rendering.
+- **⚡ High Performance**: Non-blocking asynchronous rendering pipeline with automatic resource cleanup.
 
-```sh
-npx nx serve short-forge
+---
+
+## 🛠️ Tech Stack
+
+- **Backend**: [NestJS](https://nestjs.com/) (Modular Architecture)
+- **Monorepo Management**: [Nx](https://nx.dev/)
+- **AI Runtime**: [Ollama](https://ollama.ai/)
+- **Frame Capture**: [Puppeteer](https://pptr.dev/)
+- **Media Engine**: [FFmpeg](https://ffmpeg.org/)
+- **Validation**: [Zod](https://zod.dev/)
+- **Language**: [TypeScript](https://www.typescriptlang.org/) (Strict Mode)
+
+---
+
+## 🏗️ Architecture
+
+The project follows a clean, modular architecture:
+
+```mermaid
+graph TD
+    A[Video Controller] --> B[Puzzle Service]
+    A --> C[Renderer Service]
+    B --> D[Ollama Adapter]
+    C --> E[Template Service]
+    C --> F[Frame Service]
+    C --> G[FFmpeg Service]
+    F --> H[Puppeteer]
+    G --> I[FFmpeg Bin]
 ```
 
-To create a production bundle:
+---
 
-```sh
-npx nx build short-forge
+## 🚦 Getting Started
+
+### Prerequisites
+
+- **Node.js**: v18+
+- **pnpm**: v8+
+- **Ollama**: Running locally with `gemma` or `qwen` model.
+- **FFmpeg**: Installed and available in the system PATH.
+
+### Installation
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/short-forge.git
+   cd short-forge
+   ```
+
+2. Install dependencies:
+   ```bash
+   pnpm install
+   ```
+
+3. Configure environment variables (if any):
+   ```bash
+   cp .env.example .env
+   ```
+
+### Usage
+
+**Start Development Server:**
+```bash
+pnpm start:dev
 ```
 
-To see all available targets to run for a project, run:
-
-```sh
-npx nx show project short-forge
+**Generate a Video:**
+```bash
+# Example API Call
+curl -X POST http://localhost:3000/api/v1/videos/generate
 ```
 
-These targets are either [inferred automatically](https://nx.dev/concepts/inferred-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) or defined in the `project.json` or `package.json` files.
+---
 
-[More about running tasks in the docs &raquo;](https://nx.dev/features/run-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+## 📁 Project Structure
 
-## Add new projects
-
-While you could add new projects to your workspace manually, you might want to leverage [Nx plugins](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) and their [code generation](https://nx.dev/features/generate-code?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) feature.
-
-Use the plugin's generator to create new projects.
-
-To generate a new application, use:
-
-```sh
-npx nx g @nx/nest:app demo
+```text
+├── apps/
+│   └── short-forge/          # Main NestJS application
+│       ├── src/app/
+│       │   ├── puzzle/       # Puzzle generation logic (AI)
+│       │   ├── renderer/     # Media processing & rendering
+│       │   └── video/        # API Orchestration
+├── templates/                # HTML/CSS templates for frames
+└── output/                   # Final generated videos (git-ignored)
 ```
 
-To generate a new library, use:
+---
 
-```sh
-npx nx g @nx/node:lib mylib
-```
+## 🗺️ Roadmap
 
-You can use `npx nx list` to get a list of installed plugins. Then, run `npx nx list <plugin-name>` to learn about more specific capabilities of a particular plugin. Alternatively, [install Nx Console](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) to browse plugins and generators in your IDE.
+- [x] Timeline-based rendering (12 frames)
+- [x] Dedicated answer screen template
+- [ ] Multi-model LLM routing
+- [ ] Background queue processing (BullMQ)
+- [ ] S3/Cloud Storage integration
+- [ ] Automated subtitles/voiceover
 
-[Learn more about Nx plugins &raquo;](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) | [Browse the plugin registry &raquo;](https://nx.dev/plugin-registry?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+---
 
-## Set up CI!
+## 📄 License
 
-### Step 1
+Distributed under the MIT License. See `LICENSE` for more information.
 
-To connect to Nx Cloud, run the following command:
+---
 
-```sh
-npx nx connect
-```
-
-Connecting to Nx Cloud ensures a [fast and scalable CI](https://nx.dev/ci/intro/why-nx-cloud?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) pipeline. It includes features such as:
-
-- [Remote caching](https://nx.dev/ci/features/remote-cache?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Task distribution across multiple machines](https://nx.dev/ci/features/distribute-task-execution?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Automated e2e test splitting](https://nx.dev/ci/features/split-e2e-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Task flakiness detection and rerunning](https://nx.dev/ci/features/flaky-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-### Step 2
-
-Use the following command to configure a CI workflow for your workspace:
-
-```sh
-npx nx g ci-workflow
-```
-
-[Learn more about Nx on CI](https://nx.dev/ci/intro/ci-with-nx#ready-get-started-with-your-provider?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Install Nx Console
-
-Nx Console is an editor extension that enriches your developer experience. It lets you run tasks, generate code, and improves code autocompletion in your IDE. It is available for VSCode and IntelliJ.
-
-[Install Nx Console &raquo;](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Useful links
-
-Learn more:
-
-- [Learn more about this workspace setup](https://nx.dev/nx-api/nest?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects)
-- [Learn about Nx on CI](https://nx.dev/ci/intro/ci-with-nx?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Releasing Packages with Nx release](https://nx.dev/features/manage-releases?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [What are Nx plugins?](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-And join the Nx community:
-- [Discord](https://go.nx.dev/community)
-- [Follow us on X](https://twitter.com/nxdevtools) or [LinkedIn](https://www.linkedin.com/company/nrwl)
-- [Our Youtube channel](https://www.youtube.com/@nxdevtools)
-- [Our blog](https://nx.dev/blog?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+<p align="center">
+  Built with ❤️ by the ShortForge Team
+</p>
