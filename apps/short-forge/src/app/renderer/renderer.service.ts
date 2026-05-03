@@ -65,7 +65,7 @@ export class RendererService {
       this.logger.log(`Cleaning up frames for ${videoId}`);
       for (let i = 0; i <= 11; i++) {
         const framePath = path.join(this.outputDir, `${videoId}_${i}.png`);
-        await fs.unlink(framePath).catch(() => {});
+        await fs.unlink(framePath).catch((err) => this.logger.debug(`Could not delete temporary frame ${framePath}: ${err.message}`));
       }
 
       return `output/${videoId}.mp4`;

@@ -36,7 +36,15 @@ export class TemplateService {
     }
   }
 
-  private injectCodeValues(html: string, data: any): string {
+  private injectCodeValues(
+    html: string,
+    data: {
+      hook: string;
+      code?: string;
+      options: string[];
+      footer: string;
+    },
+  ): string {
     let rendered = html;
 
     const replacements: Record<string, string> = {

@@ -16,7 +16,7 @@ export class OllamaService {
           prompt,
           stream: false,
         }),
-      }); ``
+      });
 
       if (!response.ok) {
         throw new Error(`Ollama API error: ${response.statusText}`);

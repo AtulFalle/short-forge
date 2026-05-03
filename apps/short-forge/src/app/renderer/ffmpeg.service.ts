@@ -20,7 +20,7 @@ export class FfmpegService {
       
       this.logger.log(`Executing FFmpeg command: ${command}`);
       
-      const { stdout, stderr } = await execAsync(command);
+      const { stderr } = await execAsync(command);
       
       if (stderr && !stderr.includes('frame=')) {
         this.logger.debug(`FFmpeg output: ${stderr}`);
