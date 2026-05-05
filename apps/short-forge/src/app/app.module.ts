@@ -10,6 +10,8 @@ import { RendererService } from './renderer/renderer.service';
 import { TemplateService } from './renderer/template.service';
 import { FrameService } from './renderer/frame.service';
 import { FfmpegService } from './renderer/ffmpeg.service';
+import { ThemeService } from './renderer/theme.service';
+import { BackgroundService } from './renderer/background.service';
 
 @Module({
   imports: [],
@@ -21,6 +23,8 @@ import { FfmpegService } from './renderer/ffmpeg.service';
     PromptBuilder,
     RendererService,
     TemplateService,
+    ThemeService,
+    BackgroundService,
     FrameService,
     FfmpegService,
   ],

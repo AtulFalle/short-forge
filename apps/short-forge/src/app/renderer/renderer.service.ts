@@ -2,6 +2,8 @@ import { Injectable, Logger } from '@nestjs/common';
 import { TemplateService } from './template.service';
 import { FrameService } from './frame.service';
 import { FfmpegService } from './ffmpeg.service';
+import { ThemeService } from './theme.service';
+import { BackgroundService } from './background.service';
 import * as path from 'path';
 import * as fs from 'fs/promises';
 import { v4 as uuidv4 } from 'uuid';
@@ -15,6 +17,8 @@ export class RendererService {
 
   constructor(
     private readonly templateService: TemplateService,
+    private readonly themeService: ThemeService,
+    private readonly backgroundService: BackgroundService,
     private readonly frameService: FrameService,
     private readonly ffmpegService: FfmpegService,
   ) {}
@@ -37,6 +41,8 @@ export class RendererService {
       
       // Ensure output directory exists
       await fs.mkdir(this.outputDir, { recursive: true });
+      const theme = await this.themeService.generateTheme(puzzle);
+      const background = await this.backgroundService.generateBackground(puzzle, theme, jobId);
 
       // Phase 1: Question (Frames 0-9, 10 frames)
       this.logger.log(`Creating question frames (0-9) for ${jobId}`);
@@ -44,6 +50,8 @@ export class RendererService {
         hook: puzzle.hook,
         question: puzzle.question,
         code: puzzle.code,
+        theme,
+        background,
       });
       const firstQuestionFrame = path.join(this.outputDir, `${jobId}_0.png`);
       await this.frameService.captureFrame(questionHtml, firstQuestionFrame);
@@ -60,6 +68,8 @@ export class RendererService {
           hook: puzzle.hook,
           options: puzzle.options,
           timer: remaining,
+          theme,
+          background,
         });
         await this.frameService.captureFrame(
           optionsHtml,
@@ -69,7 +79,12 @@ export class RendererService {
 
       // Phase 3: Answer (Frames 20-24, 5 frames)
       this.logger.log(`Creating answer frames (20-24) for ${jobId}`);
-      const answerHtml = await this.templateService.loadAnswerTemplate(puzzle.answer, puzzle.explanation);
+      const answerHtml = await this.templateService.loadAnswerTemplate(
+        puzzle.answer,
+        puzzle.explanation,
+        theme,
+        background,
+      );
       const firstAnswerFrame = path.join(this.outputDir, `${jobId}_20.png`);
       await this.frameService.captureFrame(answerHtml, firstAnswerFrame);
       
