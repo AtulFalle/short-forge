@@ -9,6 +9,7 @@ export const PuzzleSchema = z.object({
   explanation: z.string(),
   difficulty: z.enum(['easy', 'medium', 'hard']),
   tags: z.array(z.string()),
+  topic: z.string(),
 });
 
 export type Puzzle = z.infer<typeof PuzzleSchema>;

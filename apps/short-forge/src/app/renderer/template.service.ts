@@ -9,9 +9,8 @@ export class TemplateService {
 
   async loadCodeTemplate(data: {
     hook: string;
-    code?: string;
-    options: string[];
-    footer: string;
+    question: string;
+    code: string;
   }): Promise<string> {
     try {
       const templatePath = path.join(this.templatesDir, 'code.html');
@@ -24,12 +23,41 @@ export class TemplateService {
     }
   }
 
-  async loadAnswerTemplate(answer: string): Promise<string> {
+  async loadOptionsTemplate(data: {
+    hook: string;
+    options: string[];
+    timer: number;
+  }): Promise<string> {
+    try {
+      const templatePath = path.join(this.templatesDir, 'options.html');
+      const html = await fs.readFile(templatePath, 'utf-8');
+
+      let rendered = html;
+      const replacements: Record<string, string> = {
+        '{{hook}}': this.escapeHtml(data.hook),
+        '{{options}}': this.renderOptions(data.options),
+        '{{timer}}': data.timer.toString(),
+      };
+
+      for (const [key, value] of Object.entries(replacements)) {
+        rendered = rendered.split(key).join(value);
+      }
+
+      return rendered;
+    } catch (error) {
+      this.logger.error(`Failed to load options template: ${error.message}`);
+      throw error;
+    }
+  }
+
+  async loadAnswerTemplate(answer: string, explanation: string): Promise<string> {
     try {
       const templatePath = path.join(this.templatesDir, 'answer.html');
       const html = await fs.readFile(templatePath, 'utf-8');
 
-      return html.split('{{answer}}').join(this.escapeHtml(answer));
+      let rendered = html.split('{{answer}}').join(this.escapeHtml(answer));
+      rendered = rendered.split('{{explanation}}').join(this.escapeHtml(explanation));
+      return rendered;
     } catch (error) {
       this.logger.error(`Failed to load answer template: ${error.message}`);
       throw error;
@@ -40,18 +68,16 @@ export class TemplateService {
     html: string,
     data: {
       hook: string;
-      code?: string;
-      options: string[];
-      footer: string;
+      question: string;
+      code: string;
     },
   ): string {
     let rendered = html;
 
     const replacements: Record<string, string> = {
       '{{hook}}': this.escapeHtml(data.hook),
-      '{{code}}': this.escapeHtml(data.code || ''),
-      '{{footer}}': this.escapeHtml(data.footer),
-      '{{options}}': this.renderOptions(data.options),
+      '{{question}}': this.escapeHtml(data.question),
+      '{{code}}': this.escapeHtml(data.code),
     };
 
     for (const [key, value] of Object.entries(replacements)) {
@@ -63,7 +89,11 @@ export class TemplateService {
 
   private renderOptions(options: string[]): string {
     return options
-      .map((opt) => `<li>${this.escapeHtml(opt)}</li>`)
+      .map((opt) => `
+        <li class="option-item">
+            <div class="option-marker"></div>
+            <div class="option-text">${this.escapeHtml(opt)}</div>
+        </li>`)
       .join('\n');
   }
 
