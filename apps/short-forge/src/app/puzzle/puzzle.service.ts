@@ -28,6 +28,7 @@ export class PuzzleService {
         }
 
         const rawPuzzle = JSON.parse(jsonMatch[0]);
+        rawPuzzle.topic = topic;
         const validatedPuzzle = PuzzleSchema.parse(rawPuzzle);
 
         if (!validatedPuzzle.options.includes(validatedPuzzle.answer)) {

@@ -18,8 +18,11 @@ Return ONLY a valid JSON object with the following structure:
 Ensure the JSON is valid and the answer is present in the options array.
 
 STRICT:
-- EXACTLY 3 options, no more, no less
-- If more than 3 options, reduce to 3
-- Answer MUST be one of the options`;
+- Keep the \`hook\` extremely short (max 5 words).
+- Keep the \`question\` concise (max 15 words) so it fits on a mobile screen.
+- Keep the \`code\` snippet short (max 12 lines).
+- Keep the \`explanation\` extremely concise (max 20 words).
+- EXACTLY 3 options, no more, no less.
+- Answer MUST be one of the options.`;
   }
 }

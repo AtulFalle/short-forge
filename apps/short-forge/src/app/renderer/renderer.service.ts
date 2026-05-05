@@ -20,70 +20,84 @@ export class RendererService {
   ) {}
 
   async render(puzzle: Puzzle): Promise<string> {
-    const videoId = uuidv4();
+    const jobId = uuidv4();
+    const date = new Date();
+    const dd = String(date.getDate()).padStart(2, '0');
+    const mm = String(date.getMonth() + 1).padStart(2, '0');
+    const yyyy = date.getFullYear();
+    const formattedDate = `${dd}-${mm}-${yyyy}`;
+    
+    // Normalize topic and difficulty for filename
+    const safeTopic = puzzle.topic.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-');
+    const safeDifficulty = puzzle.difficulty.toLowerCase();
+    const outputFileName = `${safeTopic}-${safeDifficulty}-${formattedDate}`;
     
     try {
-      this.logger.log(`Starting rendering for puzzle: ${videoId}`);
+      this.logger.log(`Starting rendering for puzzle: ${outputFileName} (Job: ${jobId})`);
       
       // Ensure output directory exists
       await fs.mkdir(this.outputDir, { recursive: true });
 
-      // Frame 0: Question (full puzzle)
-      this.logger.log(`Creating frame 0 for ${videoId}`);
-      await this.createFrame(
-        puzzle,
-        'Pause & Think...',
-        path.join(this.outputDir, `${videoId}_0.png`)
-      );
+      // Phase 1: Question (Frames 0-9, 10 frames)
+      this.logger.log(`Creating question frames (0-9) for ${jobId}`);
+      const questionHtml = await this.templateService.loadCodeTemplate({
+        hook: puzzle.hook,
+        question: puzzle.question,
+        code: puzzle.code,
+      });
+      const firstQuestionFrame = path.join(this.outputDir, `${jobId}_0.png`);
+      await this.frameService.captureFrame(questionHtml, firstQuestionFrame);
+      
+      for (let i = 1; i <= 9; i++) {
+        await fs.copyFile(firstQuestionFrame, path.join(this.outputDir, `${jobId}_${i}.png`));
+      }
 
-      // Frames 1–10: Timer frames (countdown 10 to 1)
-      for (let i = 1; i <= 10; i++) {
-        const remaining = 11 - i;
-        this.logger.log(`Creating timer frame ${i} for ${videoId} (${remaining}s remaining)`);
-        await this.createFrame(
-          puzzle,
-          `⏳ ${remaining}s remaining`,
-          path.join(this.outputDir, `${videoId}_${i}.png`)
+      // Phase 2: Options & Timer (Frames 10-19, 10 frames)
+      this.logger.log(`Creating options frames (10-19) for ${jobId}`);
+      for (let i = 0; i <= 9; i++) {
+        const remaining = 10 - i;
+        const optionsHtml = await this.templateService.loadOptionsTemplate({
+          hook: puzzle.hook,
+          options: puzzle.options,
+          timer: remaining,
+        });
+        await this.frameService.captureFrame(
+          optionsHtml,
+          path.join(this.outputDir, `${jobId}_${10 + i}.png`)
         );
       }
 
-      // Frame 11: Final Frame - Answer only (using dedicated answer template)
-      this.logger.log(`Creating answer frame 11 for ${videoId}`);
-      const answerHtml = await this.templateService.loadAnswerTemplate(puzzle.answer);
-      await this.frameService.captureFrame(answerHtml, path.join(this.outputDir, `${videoId}_11.png`));
+      // Phase 3: Answer (Frames 20-24, 5 frames)
+      this.logger.log(`Creating answer frames (20-24) for ${jobId}`);
+      const answerHtml = await this.templateService.loadAnswerTemplate(puzzle.answer, puzzle.explanation);
+      const firstAnswerFrame = path.join(this.outputDir, `${jobId}_20.png`);
+      await this.frameService.captureFrame(answerHtml, firstAnswerFrame);
+      
+      for (let i = 21; i <= 24; i++) {
+        await fs.copyFile(firstAnswerFrame, path.join(this.outputDir, `${jobId}_${i}.png`));
+      }
 
       // Generate Video
-      const inputPattern = path.join(this.outputDir, `${videoId}_%d.png`);
-      const videoOutput = path.join(this.outputDir, `${videoId}.mp4`);
+      const inputPattern = path.join(this.outputDir, `${jobId}_%d.png`);
+      const videoOutput = path.join(this.outputDir, `${outputFileName}.mp4`);
       
-      this.logger.log(`Stitching video for ${videoId}`);
+      this.logger.log(`Stitching video for ${outputFileName}`);
       await this.ffmpegService.generateVideo(inputPattern, videoOutput);
 
       this.logger.log(`Video generation complete: ${videoOutput}`);
       
-      // Cleanup frames
-      this.logger.log(`Cleaning up frames for ${videoId}`);
-      for (let i = 0; i <= 11; i++) {
-        const framePath = path.join(this.outputDir, `${videoId}_${i}.png`);
-        await fs.unlink(framePath).catch((err) => this.logger.debug(`Could not delete temporary frame ${framePath}: ${err.message}`));
+      // Cleanup frames (Total 25 frames: 0 to 24)
+      this.logger.log(`Cleaning up 25 frames for ${jobId}`);
+      for (let i = 0; i <= 24; i++) {
+        const framePath = path.join(this.outputDir, `${jobId}_${i}.png`);
+        await fs.unlink(framePath).catch((err) => 
+          this.logger.debug(`Could not delete temporary frame ${framePath}: ${err.message}`)
+        );
       }
 
-      return `output/${videoId}.mp4`;
+      return `output/${outputFileName}.mp4`;
     } catch (error) {
-      this.logger.error(`Rendering failed for puzzle ${videoId}: ${error.message}`);
-      throw error;
-    }
-  }
-
-  private async createFrame(puzzle: Puzzle, footer: string, framePath: string): Promise<void> {
-    try {
-      const html = await this.templateService.loadCodeTemplate({
-        ...puzzle,
-        footer,
-      });
-      await this.frameService.captureFrame(html, framePath);
-    } catch (error) {
-      this.logger.error(`Failed to create frame at ${framePath}: ${error.message}`);
+      this.logger.error(`Rendering failed for puzzle ${jobId}: ${error.message}`);
       throw error;
     }
   }

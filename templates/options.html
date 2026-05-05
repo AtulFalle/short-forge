@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Short Forge - Question</title>
+    <title>Short Forge - Options</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
@@ -44,11 +44,11 @@
         body::before {
             content: '';
             position: absolute;
-            top: -200px;
-            right: -200px;
+            bottom: -200px;
+            left: -200px;
             width: 800px;
             height: 800px;
-            background: radial-gradient(circle, rgba(34, 211, 238, 0.15) 0%, rgba(0, 0, 0, 0) 70%);
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, rgba(0, 0, 0, 0) 70%);
             filter: blur(60px);
             z-index: 0;
         }
@@ -59,6 +59,7 @@
             display: flex;
             flex-direction: column;
             height: 100%;
+            align-items: center;
         }
 
         .hook-badge {
@@ -71,71 +72,79 @@
             font-weight: 800;
             text-transform: uppercase;
             letter-spacing: 4px;
-            margin-bottom: 40px;
+            margin-bottom: 80px;
             border: 1px solid rgba(34, 211, 238, 0.3);
-            align-self: flex-start;
         }
 
-        .question-text {
-            font-size: 64px;
-            font-weight: 600;
-            line-height: 1.3;
-            margin-bottom: 60px;
-            text-wrap: balance;
-            word-break: break-word;
+        .header-text {
+            font-size: 84px;
+            font-weight: 800;
+            margin-bottom: 120px;
+            text-align: center;
+            letter-spacing: -2px;
+            background: linear-gradient(to bottom, #fff 0%, #cbd5e1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        .code-container {
+        .options-list {
+            list-style: none;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+        }
+
+        .option-item {
             background: var(--glass-bg);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border-radius: 32px;
-            padding: 50px;
+            padding: 60px 80px;
             border: 1px solid var(--glass-border);
-            box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.6);
-            flex: 1;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
             display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            position: relative;
+            align-items: center;
+            gap: 40px;
+            transition: all 0.3s ease;
         }
 
-        /* Mac OS style window controls */
-        .window-controls {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 30px;
-        }
-
-        .window-controls div {
-            width: 20px;
-            height: 20px;
+        .option-marker {
+            width: 32px;
+            height: 32px;
+            background: var(--accent-blue);
             border-radius: 50%;
+            flex-shrink: 0;
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.6);
         }
 
-        .wc-red { background-color: #ff5f56; }
-        .wc-yellow { background-color: #ffbd2e; }
-        .wc-green { background-color: #27c93f; }
-
-        .code-block {
-            font-family: var(--font-mono);
-            font-size: 40px;
-            line-height: 1.6;
-            white-space: pre-wrap;
+        .option-text {
+            font-size: 54px;
+            font-weight: 600;
+            color: var(--text-primary);
             word-break: break-word;
-            color: #e2e8f0;
-            overflow: hidden;
         }
 
-        .footer-logo {
+        .timer-container {
             margin-top: auto;
-            text-align: center;
-            font-size: 40px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 40px 80px;
+            border-radius: 100px;
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .timer-icon {
+            font-size: 56px;
+        }
+
+        .timer-text {
+            font-size: 64px;
             font-weight: 800;
-            color: var(--text-secondary);
-            opacity: 0.4;
-            letter-spacing: 6px;
-            padding-top: 60px;
+            font-family: var(--font-mono);
+            color: var(--accent-cyan);
         }
     </style>
 </head>
@@ -143,18 +152,16 @@
     <div class="content-wrapper">
         <div class="hook-badge">{{hook}}</div>
         
-        <div class="question-text">{{question}}</div>
+        <h1 class="header-text">What's the Output?</h1>
         
-        <div class="code-container">
-            <div class="window-controls">
-                <div class="wc-red"></div>
-                <div class="wc-yellow"></div>
-                <div class="wc-green"></div>
-            </div>
-            <pre class="code-block"><code>{{code}}</code></pre>
-        </div>
+        <ul class="options-list">
+            {{options}}
+        </ul>
 
-        <div class="footer-logo">SHORT FORGE</div>
+        <div class="timer-container">
+            <span class="timer-icon">⏳</span>
+            <span class="timer-text">{{timer}}s</span>
+        </div>
     </div>
 </body>
 </html>
