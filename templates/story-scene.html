@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Short Forge Story Scene</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=IBM+Plex+Mono:wght@400;600&family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@400;600&family=Manrope:wght@400;600;800&family=Outfit:wght@400;600;800&family=Space+Grotesk:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+{{themeCss}}
+{{backgroundCss}}
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            width: 1080px;
+            height: 1920px;
+            background: linear-gradient(135deg, var(--bg-grad-start) 0%, var(--bg-grad-end) 100%);
+            color: var(--text-primary);
+            font-family: var(--font-sans);
+            overflow: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            inset: -24px;
+            background-image: var(--background-image), linear-gradient(135deg, var(--bg-grad-start), var(--bg-grad-end));
+            background-size: cover;
+            background-position: center;
+            filter: blur(var(--background-blur)) saturate(var(--background-saturation)) contrast(var(--background-contrast));
+            transform: scale(1.03);
+            z-index: 0;
+        }
+
+        body::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(circle at 82% 14%, color-mix(in srgb, var(--accent-primary) 22%, transparent), transparent 42%),
+                linear-gradient(180deg, rgba(0, 0, 0, var(--background-overlay-opacity)), rgba(0, 0, 0, calc(var(--background-overlay-opacity) + 0.08)));
+            z-index: 0;
+        }
+
+        .page {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            padding: 110px 80px 90px;
+        }
+
+        .topline {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 48px;
+            gap: 24px;
+        }
+
+        .hook {
+            display: inline-flex;
+            align-items: center;
+            padding: 14px 28px;
+            border-radius: 999px;
+            background: color-mix(in srgb, var(--accent-primary) 18%, transparent);
+            border: 1px solid color-mix(in srgb, var(--accent-primary) 45%, transparent);
+            color: var(--accent-secondary);
+            font-size: 28px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .progress {
+            color: var(--text-secondary);
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+
+        .title {
+            color: var(--text-secondary);
+            font-size: 34px;
+            font-weight: 700;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .headline {
+            font-size: 86px;
+            line-height: 1.04;
+            font-weight: 800;
+            text-wrap: balance;
+            margin-bottom: 52px;
+            max-width: 920px;
+        }
+
+        .narration {
+            margin-top: auto;
+            padding: 44px;
+            border-radius: 32px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            box-shadow: 0 24px 48px -18px rgba(0, 0, 0, 0.58);
+        }
+
+        .narration p {
+            font-size: 42px;
+            line-height: 1.42;
+            color: var(--text-primary);
+            word-break: break-word;
+        }
+    </style>
+</head>
+<body>
+    <main class="page">
+        <div class="topline">
+            <div class="hook">{{hook}}</div>
+            <div class="progress">{{sceneIndex}} / {{sceneCount}}</div>
+        </div>
+        <div class="title">{{title}}</div>
+        <div class="headline">{{visualText}}</div>
+        <section class="narration">
+            <p>{{narration}}</p>
+        </section>
+    </main>
+</body>
+</html>

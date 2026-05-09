@@ -1,10 +1,17 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 
+export type OllamaGenerateOptions = {
+  temperature?: number;
+  format?: 'json';
+};
+
 @Injectable()
 export class OllamaService {
-  private readonly baseUrl = 'http://localhost:11434/api/generate';
+  private readonly baseUrl =
+    process.env.OLLAMA_BASE_URL?.trim() || 'http://localhost:11434/api/generate';
+  private readonly model = process.env.OLLAMA_MODEL?.trim() || 'gemma4:e4b';
 
-  async generate(prompt: string): Promise<string> {
+  async generate(prompt: string, options: OllamaGenerateOptions = {}): Promise<string> {
     try {
       const response = await fetch(this.baseUrl, {
         method: 'POST',
@@ -12,9 +19,13 @@ export class OllamaService {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          model: 'gemma4:e4b',
+          model: this.model,
           prompt,
           stream: false,
+          options: {
+            temperature: options.temperature ?? 0.7,
+          },
+          ...(options.format ? { format: options.format } : {}),
         }),
       });
 

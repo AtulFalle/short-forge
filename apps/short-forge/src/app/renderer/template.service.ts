@@ -91,6 +91,43 @@ export class TemplateService {
     }
   }
 
+  async loadStorySceneTemplate(data: {
+    title: string;
+    hook: string;
+    visualText: string;
+    narration: string;
+    sceneIndex: number;
+    sceneCount: number;
+    theme?: RenderTheme;
+    background?: RenderBackground;
+  }): Promise<string> {
+    try {
+      const templatePath = path.join(this.templatesDir, 'story-scene.html');
+      const html = await fs.readFile(templatePath, 'utf-8');
+
+      let rendered = html;
+      const replacements: Record<string, string> = {
+        '{{title}}': this.escapeHtml(data.title),
+        '{{hook}}': this.escapeHtml(data.hook),
+        '{{visualText}}': this.escapeHtml(data.visualText),
+        '{{narration}}': this.escapeHtml(data.narration),
+        '{{sceneIndex}}': data.sceneIndex.toString(),
+        '{{sceneCount}}': data.sceneCount.toString(),
+        '{{themeCss}}': this.renderThemeCss(data.theme ?? DEFAULT_RENDER_THEME),
+        '{{backgroundCss}}': this.renderBackgroundCss(data.background ?? DEFAULT_RENDER_BACKGROUND),
+      };
+
+      for (const [key, value] of Object.entries(replacements)) {
+        rendered = rendered.split(key).join(value);
+      }
+
+      return rendered;
+    } catch (error) {
+      this.logger.error(`Failed to load story scene template: ${error.message}`);
+      throw error;
+    }
+  }
+
   private injectCodeValues(
     html: string,
     data: {
