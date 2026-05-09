@@ -12,15 +12,24 @@ import { FrameService } from './renderer/frame.service';
 import { FfmpegService } from './renderer/ffmpeg.service';
 import { ThemeService } from './renderer/theme.service';
 import { BackgroundService } from './renderer/background.service';
+import { ScriptVideoController } from './script-video/script-video.controller';
+import { ScriptVideoPromptBuilder } from './script-video/script-video.prompt-builder';
+import { ScriptVideoJobStore } from './script-video/script-video-job.store';
+import { ScriptVideoService } from './script-video/script-video.service';
+import { ScriptVideoRendererService } from './script-video/script-video-renderer.service';
 
 @Module({
   imports: [],
-  controllers: [AppController, PuzzleController, VideoController],
+  controllers: [AppController, PuzzleController, VideoController, ScriptVideoController],
   providers: [
     AppService,
     PuzzleService,
     OllamaService,
     PromptBuilder,
+    ScriptVideoPromptBuilder,
+    ScriptVideoJobStore,
+    ScriptVideoService,
+    ScriptVideoRendererService,
     RendererService,
     TemplateService,
     ThemeService,

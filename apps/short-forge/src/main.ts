@@ -7,8 +7,10 @@ import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app/app.module';
+import { loadEnvFile } from './load-env';
 
 async function bootstrap() {
+  loadEnvFile();
   const app = await NestFactory.create(AppModule);
   const globalPrefix = 'api';
   app.setGlobalPrefix(globalPrefix);
@@ -18,6 +20,7 @@ async function bootstrap() {
     .setDescription('The Short Forge API description')
     .setVersion('1.0')
     .addTag('puzzles')
+    .addTag('script-videos')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('docs', app, document);
